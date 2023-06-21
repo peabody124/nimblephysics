@@ -530,21 +530,24 @@ void Skeleton(
           +[](dart::dynamics::Skeleton* self)
               -> std::vector<dart::dynamics::BodyNode*> {
             return self->getBodyNodes();
-          })
+          },
+          py::return_value_policy::reference_internal)
       .def(
           "getBodyNodes",
           +[](dart::dynamics::Skeleton* self, const std::string& name)
               -> std::vector<dart::dynamics::BodyNode*> {
             return self->getBodyNodes(name);
           },
-          ::py::arg("name"))
+          ::py::arg("name"),
+          py::return_value_policy::reference_internal)
       .def(
           "getBodyNodes",
           +[](const dart::dynamics::Skeleton* self, const std::string& name)
               -> std::vector<const dart::dynamics::BodyNode*> {
             return self->getBodyNodes(name);
           },
-          ::py::arg("name"))
+          ::py::arg("name"),
+          py::return_value_policy::reference_internal)
       .def(
           "hasBodyNode",
           +[](const dart::dynamics::Skeleton* self,
@@ -574,7 +577,8 @@ void Skeleton(
               -> std::vector<const dart::dynamics::BodyNode*> {
             return self->getTreeBodyNodes(_treeIdx);
           },
-          ::py::arg("treeIdx"))
+          ::py::arg("treeIdx"),
+          py::return_value_policy::reference_internal)
       .def(
           "getNumJoints",
           +[](const dart::dynamics::Skeleton* self) -> std::size_t {
