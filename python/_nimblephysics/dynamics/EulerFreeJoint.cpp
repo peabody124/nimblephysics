@@ -35,6 +35,8 @@
 #include <pybind11/eigen.h>
 #include <pybind11/pybind11.h>
 
+#include "Joint.hpp"
+
 namespace py = pybind11;
 
 namespace dart {
@@ -42,8 +44,10 @@ namespace python {
 
 void EulerFreeJoint(py::module& m)
 {
-  ::py::class_<dart::dynamics::EulerFreeJoint, dart::dynamics::GenericJoint<dart::math::R6Space>>(
-      m, "EulerFreeJoint")
+  ::py::class_<
+      dart::dynamics::EulerFreeJoint,
+      dart::dynamics::GenericJoint<dart::math::R6Space>,
+      std::shared_ptr<dart::dynamics::EulerFreeJoint>>(m, "EulerFreeJoint")
       .def(
           "getType",
           &dart::dynamics::EulerFreeJoint::getType,

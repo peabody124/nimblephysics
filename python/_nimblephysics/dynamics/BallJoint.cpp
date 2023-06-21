@@ -42,13 +42,20 @@ namespace python {
 
 void BallJoint(py::module& m)
 {
-  ::py::class_<dart::dynamics::BallJoint::Properties>(m, "BallJointProperties")
+  ::py::class_<
+      dart::dynamics::BallJoint::Properties,
+      dart::dynamics::detail::GenericJointProperties<dart::math::SO3Space>>(
+      m, "BallJointProperties")
       .def(::py::init<>())
       .def(
-          ::py::init<const dart::dynamics::BallJoint::Properties&>(),
+          ::py::init<const dart::dynamics::GenericJoint<
+              dart::math::SO3Space>::Properties&>(),
           ::py::arg("properties"));
 
-  ::py::class_<dart::dynamics::BallJoint, dart::dynamics::GenericJoint<dart::math::SO3Space>>(m, "BallJoint")
+  ::py::class_<
+      dart::dynamics::BallJoint,
+      dart::dynamics::GenericJoint<dart::math::SO3Space>,
+      std::shared_ptr<dart::dynamics::BallJoint>>(m, "BallJoint")
       .def(
           "getType",
           +[](const dart::dynamics::BallJoint* self) -> const std::string& {
@@ -69,7 +76,8 @@ void BallJoint(py::module& m)
       .def(
           "getRelativeJacobianStatic",
           +[](const dart::dynamics::BallJoint* self,
-              const Eigen::Vector3s& _positions) -> Eigen::Matrix<s_t, 6, 3> {
+              const Eigen::Vector3s& _positions)
+              -> Eigen::Matrix<s_t, 6, 3> {
             return self->getRelativeJacobianStatic(_positions);
           },
           ::py::arg("positions"))

@@ -35,6 +35,8 @@
 #include <pybind11/eigen.h>
 #include <pybind11/pybind11.h>
 
+#include "Joint.hpp"
+
 namespace py = pybind11;
 
 namespace dart {
@@ -42,8 +44,10 @@ namespace python {
 
 void CustomJoint(py::module& m)
 {
-  ::py::class_<dart::dynamics::CustomJoint<1>, dart::dynamics::GenericJoint<math::RealVectorSpace<1>>>(
-      m, "CustomJoint1")
+  ::py::class_<
+      dart::dynamics::CustomJoint<1>,
+      dart::dynamics::GenericJoint<dart::math::R1Space>,
+      std::shared_ptr<dart::dynamics::CustomJoint<1>>>(m, "CustomJoint1")
       .def(
           "getType",
           &dart::dynamics::CustomJoint<1>::getType,
@@ -86,8 +90,10 @@ void CustomJoint(py::module& m)
           },
           ::py::return_value_policy::reference_internal);
 
-  ::py::class_<dart::dynamics::CustomJoint<2>, dart::dynamics::GenericJoint<dart::math::R2Space>>(
-      m, "CustomJoint2")
+  ::py::class_<
+      dart::dynamics::CustomJoint<2>,
+      dart::dynamics::GenericJoint<dart::math::R2Space>,
+      std::shared_ptr<dart::dynamics::CustomJoint<2>>>(m, "CustomJoint2")
       .def(
           "getType",
           &dart::dynamics::CustomJoint<2>::getType,

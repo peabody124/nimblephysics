@@ -42,7 +42,11 @@ namespace py = pybind11;
 namespace dart {
 namespace python {
 
-void Entity(py::module& m, ::py::class_<dart::dynamics::Entity>& entity)
+void Entity(
+    py::module& m,
+    ::py::class_<
+        dart::dynamics::Entity,
+        std::shared_ptr<dart::dynamics::Entity>>& entity)
 {
   entity
       .def(
@@ -106,8 +110,10 @@ void Entity(py::module& m, ::py::class_<dart::dynamics::Entity>& entity)
             return self->needsAccelerationUpdate();
           });
 
-  ::py::class_<dart::dynamics::Detachable, dart::dynamics::Entity>(
-      m, "Detachable")
+  ::py::class_<
+      dart::dynamics::Detachable,
+      dart::dynamics::Entity,
+      std::shared_ptr<dart::dynamics::Detachable>>(m, "Detachable")
       .def(
           "setParentFrame",
           +[](dart::dynamics::Detachable* self,

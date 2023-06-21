@@ -51,15 +51,18 @@ void RevoluteJoint(py::module& m)
 
   ::py::class_<
       dart::dynamics::RevoluteJoint::Properties,
+      dart::dynamics::GenericJoint<math::R1Space>::Properties,
       dart::dynamics::RevoluteJoint::UniqueProperties>(
       m, "RevoluteJointProperties")
       .def(::py::init<>())
       .def(
-          ::py::init<const dart::dynamics::RevoluteJoint::Properties&>(),
+          ::py::init<const dart::dynamics::GenericJoint<
+              dart::math::R1Space>::Properties&>(),
           ::py::arg("genericJointProperties"))
       .def(
           ::py::init<
-              const dart::dynamics::RevoluteJoint::Properties&,
+              const dart::dynamics::GenericJoint<
+                  dart::math::R1Space>::Properties&,
               const dart::dynamics::RevoluteJoint::UniqueProperties&>(),
           ::py::arg("genericJointProperties"),
           ::py::arg("uniqueProperties"))
@@ -71,7 +74,8 @@ void RevoluteJoint(py::module& m)
 
   ::py::class_<
       dart::dynamics::RevoluteJoint,
-      dart::dynamics::detail::RevoluteJointBase>(m, "RevoluteJoint")
+      dart::dynamics::detail::RevoluteJointBase,
+      std::shared_ptr<dart::dynamics::RevoluteJoint>>(m, "RevoluteJoint")
       /*
       .def(
           "hasRevoluteJointAspect",

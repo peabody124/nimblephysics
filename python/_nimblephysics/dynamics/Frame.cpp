@@ -44,7 +44,10 @@ namespace python {
 
 void Frame(
     py::module& m,
-    ::py::class_<dart::dynamics::Frame, dart::dynamics::Entity>& frame)
+    ::py::class_<
+        dart::dynamics::Frame,
+        dart::dynamics::Entity,
+        std::shared_ptr<dart::dynamics::Frame>>& frame)
 {
   (void)m;
   frame

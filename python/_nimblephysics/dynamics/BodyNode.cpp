@@ -64,7 +64,7 @@ namespace py = pybind11;
                     dart::dynamics::joint_type,                                \
                     dart::dynamics::BodyNode>();                               \
               },                                                               \
-      ::py::return_value_policy::reference)                                    \
+      ::py::return_value_policy::reference_internal)                           \
       .def(                                                                    \
           "create" #joint_type "AndBodyNodePair",                              \
           +[](dart::dynamics::BodyNode* self,                                  \
@@ -76,7 +76,7 @@ namespace py = pybind11;
                 dart::dynamics::joint_type,                                    \
                 dart::dynamics::BodyNode>(jointProperties);                    \
           },                                                                   \
-          ::py::return_value_policy::reference,                                \
+          ::py::return_value_policy::reference_internal,                       \
           ::py::arg("jointProperties"))                                        \
       .def(                                                                    \
           "create" #joint_type "AndBodyNodePair",                              \
@@ -90,7 +90,7 @@ namespace py = pybind11;
                 dart::dynamics::joint_type,                                    \
                 dart::dynamics::BodyNode>(jointProperties, bodyProperties);    \
           },                                                                   \
-          ::py::return_value_policy::reference,                                \
+          ::py::return_value_policy::reference_internal,                       \
           ::py::arg("jointProperties"),                                        \
           ::py::arg("bodyProperties"))
 
@@ -104,11 +104,15 @@ void BodyNode(
     ::py::class_<dart::dynamics::BodyNode::Properties>& bodyNodeProps,
     ::py::class_<
         dart::dynamics::TemplatedJacobianNode<dart::dynamics::BodyNode>,
-        dart::dynamics::JacobianNode>& templatedJacobianBodyNode,
+        dart::dynamics::JacobianNode,
+        std::shared_ptr<
+            dart::dynamics::TemplatedJacobianNode<dart::dynamics::BodyNode>>>&
+        templatedJacobianBodyNode,
     ::py::class_<
         dart::dynamics::BodyNode,
         dart::dynamics::TemplatedJacobianNode<dart::dynamics::BodyNode>,
-        dart::dynamics::Frame>& bodyNode)
+        dart::dynamics::Frame,
+        std::shared_ptr<dart::dynamics::BodyNode>>& bodyNode)
 {
   (void)m;
   bodyNodeAspectProps.def(::py::init<>())
@@ -552,14 +556,16 @@ void BodyNode(
           ::py::arg("otherBodyNode"))
       .def(
           "setName",
-          +[](dart::dynamics::BodyNode* self,
-              const std::string& _name) -> void { self->setName(_name); },
+          +[](dart::dynamics::BodyNode* self, const std::string& _name)
+              -> const std::string& { return self->setName(_name); },
+          ::py::return_value_policy::reference_internal,
           ::py::arg("name"))
       .def(
           "getName",
-          +[](const dart::dynamics::BodyNode* self) -> std::string {
+          +[](const dart::dynamics::BodyNode* self) -> const std::string& {
             return self->getName();
-          })
+          },
+          ::py::return_value_policy::reference_internal)
       .def(
           "setGravityMode",
           +[](dart::dynamics::BodyNode* self, bool _gravityMode) {
@@ -944,19 +950,19 @@ void BodyNode(
           +[](dart::dynamics::BodyNode* self) -> dart::dynamics::Joint* {
             return self->getParentJoint();
           },
-          ::py::return_value_policy::reference)
+          ::py::return_value_policy::reference_internal)
       .def(
           "getParentBodyNode",
           +[](dart::dynamics::BodyNode* self) -> dart::dynamics::BodyNode* {
             return self->getParentBodyNode();
           },
-          ::py::return_value_policy::reference)
+          ::py::return_value_policy::reference_internal)
       .def(
           "getChildJoint",
           +[](dart::dynamics::BodyNode* self, int index)
               -> dart::dynamics::Joint* { return self->getChildJoint(index); },
           ::py::arg("index"),
-          ::py::return_value_policy::reference)
+          ::py::return_value_policy::reference_internal)
       // clang-format off
       DARTPY_DEFINE_CREATE_CHILD_JOINT_AND_BODY_NODE_PAIR(WeldJoint)
       DARTPY_DEFINE_CREATE_CHILD_JOINT_AND_BODY_NODE_PAIR(RevoluteJoint)
@@ -1011,6 +1017,13 @@ void BodyNode(
           ::py::return_value_policy::reference_internal,
           ::py::arg("shape"),
           ::py::arg("name"))
+      .def(
+          "getShapeNodes",
+          +[](dart::dynamics::BodyNode* self)
+              -> const std::vector<dart::dynamics::ShapeNode*> {
+            return self->getShapeNodes();
+          },
+          ::py::return_value_policy::reference_internal)
       .def(
           "removeAllShapeNodes",
           +[](dart::dynamics::BodyNode* self) { self->removeAllShapeNodes(); })

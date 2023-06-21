@@ -473,7 +473,12 @@ namespace py = pybind11;
               dart::dynamics::GenericJoint<space>,                             \
               dart::dynamics::detail::GenericJointState<space>,                \
               dart::dynamics::detail::GenericJointUniqueProperties<space>>>,   \
-      dart::common::Composite>( \
+      dart::common::Composite,                                                 \
+      std::shared_ptr<dart::common::SpecializedForAspect<                      \
+          dart::common::EmbeddedStateAndPropertiesAspect<                      \
+              dart::dynamics::GenericJoint<space>,                             \
+              dart::dynamics::detail::GenericJointState<space>,                \
+              dart::dynamics::detail::GenericJointUniqueProperties<space>>>>>( \
       m,                                                                       \
       "SpecializedForAspect_EmbeddedStateAndPropertiesAspect_"                 \
       "GenericJoint_" #name "_GenericJointState_GenericJointUniqueProperties") \
@@ -489,7 +494,12 @@ namespace py = pybind11;
           dart::common::EmbeddedStateAndPropertiesAspect<                      \
               dart::dynamics::GenericJoint<space>,                             \
               dart::dynamics::detail::GenericJointState<space>,                \
-              dart::dynamics::detail::GenericJointUniqueProperties<space>>>>( \
+              dart::dynamics::detail::GenericJointUniqueProperties<space>>>,   \
+      std::shared_ptr<dart::common::RequiresAspect<                            \
+          dart::common::EmbeddedStateAndPropertiesAspect<                      \
+              dart::dynamics::GenericJoint<space>,                             \
+              dart::dynamics::detail::GenericJointState<space>,                \
+              dart::dynamics::detail::GenericJointUniqueProperties<space>>>>>( \
       m,                                                                       \
       "RequiresAspect_EmbeddedStateAndPropertiesAspect_GenericJoint_" #name    \
       "_GenericJointState_GenericJointUniqueProperties")                       \
@@ -504,7 +514,11 @@ namespace py = pybind11;
           dart::common::EmbeddedStateAndPropertiesAspect<                      \
               dart::dynamics::GenericJoint<space>,                             \
               dart::dynamics::detail::GenericJointState<space>,                \
-              dart::dynamics::detail::GenericJointUniqueProperties<space>>>>(      \
+              dart::dynamics::detail::GenericJointUniqueProperties<space>>>,   \
+      std::shared_ptr<dart::common::EmbedStateAndProperties<                   \
+          dart::dynamics::GenericJoint<space>,                                 \
+          dart::dynamics::detail::GenericJointState<space>,                    \
+          dart::dynamics::detail::GenericJointUniqueProperties<space>>>>(      \
       m,                                                                       \
       "EmbedStateAndProperties_GenericJoint_" #name                            \
       "GenericJointState_GenericJointUniqueProperties");                       \
@@ -520,7 +534,13 @@ namespace py = pybind11;
           dart::dynamics::GenericJoint<space>,                                 \
           dart::dynamics::detail::GenericJointState<space>,                    \
           dart::dynamics::detail::GenericJointUniqueProperties<space>>,        \
-      dart::dynamics::Joint>(                                            \
+      dart::dynamics::Joint,                                                   \
+      std::shared_ptr<dart::common::CompositeJoiner<                           \
+          dart::common::EmbedStateAndProperties<                               \
+              dart::dynamics::GenericJoint<space>,                             \
+              dart::dynamics::detail::GenericJointState<space>,                \
+              dart::dynamics::detail::GenericJointUniqueProperties<space>>,    \
+          dart::dynamics::Joint>>>(                                            \
       m,                                                                       \
       "CompositeJoiner_EmbedStateAndProperties_GenericJoint_" #name            \
       "GenericJointStateGenericJointUniqueProperties_Joint");                  \
@@ -536,7 +556,12 @@ namespace py = pybind11;
               dart::dynamics::GenericJoint<space>,                             \
               dart::dynamics::detail::GenericJointState<space>,                \
               dart::dynamics::detail::GenericJointUniqueProperties<space>>,    \
-          dart::dynamics::Joint>>(                                            \
+          dart::dynamics::Joint>,                                              \
+      std::shared_ptr<dart::common::EmbedStateAndPropertiesOnTopOf<            \
+          dart::dynamics::GenericJoint<space>,                                 \
+          dart::dynamics::detail::GenericJointState<space>,                    \
+          dart::dynamics::detail::GenericJointUniqueProperties<space>,         \
+          dart::dynamics::Joint>>>(                                            \
       m,                                                                       \
       "EmbedStateAndPropertiesOnTopOf_GenericJoint_" #name                     \
       "_GenericJointState_GenericJointUniqueProperties_Joint");                \
@@ -547,7 +572,8 @@ namespace py = pybind11;
           dart::dynamics::GenericJoint<space>,                                 \
           dart::dynamics::detail::GenericJointState<space>,                    \
           dart::dynamics::detail::GenericJointUniqueProperties<space>,         \
-          dart::dynamics::Joint>>(                   \
+          dart::dynamics::Joint>,                                              \
+      std::shared_ptr<dart::dynamics::GenericJoint<space>>>(                   \
       m, "GenericJoint_" #name)                                                \
       .def(                                                                    \
           "setProperties",                                                     \

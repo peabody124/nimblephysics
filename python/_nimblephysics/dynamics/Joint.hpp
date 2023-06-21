@@ -49,7 +49,11 @@ namespace python {
           dart::common::EmbeddedPropertiesAspect<                              \
               dart::dynamics::type,                                            \
               dart::dynamics::detail::type##UniqueProperties>>,                \
-      dart::common::Composite>(                                                \
+      dart::common::Composite,                                                 \
+      std::shared_ptr<dart::common::SpecializedForAspect<                      \
+          dart::common::EmbeddedPropertiesAspect<                              \
+              dart::dynamics::type,                                            \
+              dart::dynamics::detail::type##UniqueProperties>>>>(              \
       m,                                                                       \
       "SpecializedForAspect_EmbeddedPropertiesAspect_" #type "_" #type         \
       "UniqueProperties")                                                      \
@@ -62,7 +66,11 @@ namespace python {
       dart::common::SpecializedForAspect<                                      \
           dart::common::EmbeddedPropertiesAspect<                              \
               dart::dynamics::type,                                            \
-              dart::dynamics::detail::type##UniqueProperties>>>(               \
+              dart::dynamics::detail::type##UniqueProperties>>,                \
+      std::shared_ptr<                                                         \
+          dart::common::RequiresAspect<dart::common::EmbeddedPropertiesAspect< \
+              dart::dynamics::type,                                            \
+              dart::dynamics::detail::type##UniqueProperties>>>>(              \
       m,                                                                       \
       "RequiresAspect_EmbeddedPropertiesAspect_" #type "_" #type               \
       "UniqueProperties")                                                      \
@@ -73,6 +81,9 @@ namespace python {
           dart::dynamics::type,                                                \
           dart::dynamics::detail::type##UniqueProperties>,                     \
       dart::common::RequiresAspect<dart::common::EmbeddedPropertiesAspect<     \
+          dart::dynamics::type,                                                \
+          dart::dynamics::detail::type##UniqueProperties>>,                    \
+      std::shared_ptr<dart::common::EmbedProperties<                           \
           dart::dynamics::type,                                                \
           dart::dynamics::detail::type##UniqueProperties>>>(                   \
       m, "EmbedProperties_" #type "_" #type "UniqueProperties");               \
@@ -86,7 +97,12 @@ namespace python {
       dart::common::EmbedProperties<                                           \
           dart::dynamics::type,                                                \
           dart::dynamics::detail::type##UniqueProperties>,                     \
-      dart::dynamics::GenericJoint<dart::math::space>>(                        \
+      dart::dynamics::GenericJoint<dart::math::space>,                         \
+      std::shared_ptr<dart::common::CompositeJoiner<                           \
+          dart::common::EmbedProperties<                                       \
+              dart::dynamics::type,                                            \
+              dart::dynamics::detail::type##UniqueProperties>,                 \
+          dart::dynamics::GenericJoint<dart::math::space>>>>(                  \
       m,                                                                       \
       "CompositeJoiner_EmbedProperties_" #type "_" #type                       \
       "UniqueProperties_GenericJoint_" #space);                                \
@@ -100,7 +116,11 @@ namespace python {
           dart::common::EmbedProperties<                                       \
               dart::dynamics::type,                                            \
               dart::dynamics::detail::type##UniqueProperties>,                 \
-          dart::dynamics::GenericJoint<dart::math::space>>>(                   \
+          dart::dynamics::GenericJoint<dart::math::space>>,                    \
+      std::shared_ptr<dart::common::EmbedPropertiesOnTopOf<                    \
+          dart::dynamics::type,                                                \
+          dart::dynamics::detail::type##UniqueProperties,                      \
+          dart::dynamics::GenericJoint<dart::math::space>>>>(                  \
       m,                                                                       \
       "EmbedPropertiesOnTopOf_" #type "_" #type                                \
       "UniqueProperties_GenericJoint_" #space);

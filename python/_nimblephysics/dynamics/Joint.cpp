@@ -45,7 +45,13 @@ namespace python {
 void Joint(
     py::module& m,
     ::py::class_<dart::dynamics::detail::JointProperties>& jointProps,
-    ::py::class_<dart::dynamics::Joint>& joint)
+    ::py::class_<
+        dart::dynamics::Joint,
+        dart::common::Subject,
+        dart::common::EmbedProperties<
+            dart::dynamics::Joint,
+            dart::dynamics::detail::JointProperties>,
+        std::shared_ptr<dart::dynamics::Joint>>& joint)
 {
   auto attr = m.attr("Joint");
 
@@ -112,27 +118,32 @@ void Joint(
           ::py::arg("otherJoint"))
       .def(
           "setName",
-          +[](dart::dynamics::Joint* self, const std::string& name) -> void {
-            self->setName(name);
-          },
+          +[](dart::dynamics::Joint* self, const std::string& name)
+              -> const std::string& { return self->setName(name); },
+          ::py::return_value_policy::reference_internal,
           ::py::arg("name"))
       .def(
           "setName",
           +[](dart::dynamics::Joint* self,
               const std::string& name,
-              bool renameDofs) -> void { self->setName(name, renameDofs); },
+              bool renameDofs) -> const std::string& {
+            return self->setName(name, renameDofs);
+          },
+          ::py::return_value_policy::reference_internal,
           ::py::arg("name"),
           ::py::arg("renameDofs"))
       .def(
           "getName",
-          +[](const dart::dynamics::Joint* self) -> std::string {
+          +[](const dart::dynamics::Joint* self) -> const std::string& {
             return self->getName();
-          })
+          },
+          ::py::return_value_policy::reference_internal)
       .def(
           "getType",
-          +[](const dart::dynamics::Joint* self) -> std::string {
+          +[](const dart::dynamics::Joint* self) -> const std::string& {
             return self->getType();
-          })
+          },
+          ::py::return_value_policy::reference_internal)
       .def(
           "setActuatorType",
           +[](dart::dynamics::Joint* self,
@@ -161,13 +172,13 @@ void Joint(
           +[](dart::dynamics::Joint* self) -> dart::dynamics::BodyNode* {
             return self->getChildBodyNode();
           },
-          ::py::return_value_policy::reference)
+          ::py::return_value_policy::reference_internal)
       .def(
           "getParentBodyNode",
           +[](dart::dynamics::Joint* self) -> dart::dynamics::BodyNode* {
             return self->getParentBodyNode();
           },
-          ::py::return_value_policy::reference)
+          ::py::return_value_policy::reference_internal)
       .def(
           "getSkeleton",
           +[](dart::dynamics::Joint* self) -> dart::dynamics::SkeletonPtr {
@@ -232,9 +243,10 @@ void Joint(
           "setDofName",
           +[](dart::dynamics::Joint* self,
               std::size_t index,
-              const std::string& name) -> void {
-            self->setDofName(index, name);
+              const std::string& name) -> const std::string& {
+            return self->setDofName(index, name);
           },
+          ::py::return_value_policy::reference_internal,
           ::py::arg("index"),
           ::py::arg("name"))
       .def(
@@ -242,9 +254,10 @@ void Joint(
           +[](dart::dynamics::Joint* self,
               std::size_t index,
               const std::string& name,
-              bool preserveName) -> void {
-            self->setDofName(index, name, preserveName);
+              bool preserveName) -> const std::string& {
+            return self->setDofName(index, name, preserveName);
           },
+          ::py::return_value_policy::reference_internal,
           ::py::arg("index"),
           ::py::arg("name"),
           ::py::arg("preserveName"))
@@ -263,7 +276,8 @@ void Joint(
       .def(
           "getDofName",
           +[](const dart::dynamics::Joint* self, std::size_t index)
-              -> std::string { return self->getDofName(index); },
+              -> const std::string& { return self->getDofName(index); },
+          ::py::return_value_policy::reference_internal,
           ::py::arg("index"))
       .def(
           "getNumDofs",

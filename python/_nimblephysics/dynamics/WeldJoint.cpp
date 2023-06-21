@@ -35,6 +35,8 @@
 #include <pybind11/eigen.h>
 #include <pybind11/pybind11.h>
 
+#include "Joint.hpp"
+
 namespace py = pybind11;
 
 namespace dart {
@@ -44,8 +46,10 @@ void WeldJoint(py::module& m)
 {
   ::py::class_<dart::dynamics::WeldJoint::Properties>(m, "WeldJointProperties");
 
-  ::py::class_<dart::dynamics::WeldJoint, dart::dynamics::ZeroDofJoint>(
-      m, "WeldJoint")
+  ::py::class_<
+      dart::dynamics::WeldJoint,
+      dart::dynamics::ZeroDofJoint,
+      std::shared_ptr<dart::dynamics::WeldJoint>>(m, "WeldJoint")
       .def(
           "getWeldJointProperties",
           +[](const dart::dynamics::WeldJoint* self)
