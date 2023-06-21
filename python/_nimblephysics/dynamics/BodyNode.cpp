@@ -993,6 +993,15 @@ void BodyNode(
           },
           ::py::return_value_policy::reference_internal,
           ::py::arg("index"))
+
+      .def(
+          "getShape",
+          +[](const dart::dynamics::BodyNode* self,
+              std::size_t index) -> dart::dynamics::ConstShapePtr {
+            return self->getShapeNode(index)->getShape();
+          },
+          ::py::return_value_policy::reference_internal,
+          ::py::arg("index"))
       .def(
           "createShapeNode",
           +[](dart::dynamics::BodyNode* self,
